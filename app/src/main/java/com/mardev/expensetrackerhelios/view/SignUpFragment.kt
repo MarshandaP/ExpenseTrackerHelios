@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.mardev.expensetrackerhelios.R
 
-class LoginFragment : Fragment() {
+class SignUpFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
         }
     }
 
@@ -22,7 +21,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
 }
