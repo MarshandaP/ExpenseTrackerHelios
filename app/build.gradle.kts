@@ -7,6 +7,11 @@ android {
     namespace = "com.mardev.expensetrackerhelios"
     compileSdk = 35
 
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.mardev.expensetrackerhelios"
         minSdk = 24
