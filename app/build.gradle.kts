@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.mardev.expensetrackerhelios"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.mardev.expensetrackerhelios"
