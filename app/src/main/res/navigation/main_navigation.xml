@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/ItemExpenseTrack">
+    <fragment
+        android:id="@+id/ItemExpenseTrack"
+        android:name="com.mardev.expensetrackerhelios.view.EkspenseTrackerFragment"
+        android:label="fragment_ekspense_tracker"
+        tools:layout="@layout/fragment_ekspense_tracker" >
+        <action
+            android:id="@+id/actionNewExpense"
+            app:destination="@id/newExpenseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newExpenseFragment"
+        android:name="com.mardev.expensetrackerhelios.view.NewExpenseFragment"
+        android:label="fragment_new_expense"
+        tools:layout="@layout/fragment_new_expense" />
+    <fragment
+        android:id="@+id/ItemBudgeting"
+        android:name="com.mardev.expensetrackerhelios.view.BudgetingFragment"
+        android:label="fragment_budgeting"
+        tools:layout="@layout/fragment_budgeting" >
+        <action
+            android:id="@+id/actionNewBudget"
+            app:destination="@id/newBudgetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newBudgetFragment"
+        android:name="com.mardev.expensetrackerhelios.view.NewBudgetFragment"
+        android:label="NewBudgetFragment" />
+    <fragment
+        android:id="@+id/ItemReport"
+        android:name="com.mardev.expensetrackerhelios.view.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/ItemProfile"
+        android:name="com.mardev.expensetrackerhelios.view.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
+</navigation>
