@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Budgeting(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
     @ColumnInfo(name = "Name_Budget")
-    val nama: String,
+    var nama: String,
     @ColumnInfo(name = "Nominal_Budget")
-    val nominal: Double
-)
+    var nominal: Double
+){
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
+}

@@ -1,6 +1,8 @@
 package com.mardev.expensetrackerhelios.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -9,10 +11,10 @@ import androidx.room.Update
 @Dao
 interface BudgetingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg todo:Budgeting)
+    fun insertAll(vararg budget:Budgeting)
 
     @Query("SELECT * FROM budgeting")
-    fun selectAllTodo(): List<Budgeting>
+    fun selectAllBudget(): LiveData<List<Budgeting>>
 
     @Query("SELECT * FROM budgeting WHERE id= :id")
     fun selectBudget(id:Int): Budgeting
@@ -21,5 +23,8 @@ interface BudgetingDao {
     fun update(name:String, nominal:Double, id:Int)
 
     @Update
-    fun updateTodo(todo:Budgeting)
+    fun updateTodo(budget: Budgeting)
+
+    @Delete
+    fun deleteBudget(budget: Budgeting)
 }

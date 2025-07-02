@@ -37,7 +37,7 @@ class BudgetingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel =ViewModelProvider(this).get(ListBudgetViewModel::class.java)
-        viewModel.refresh()
+//        viewModel.refresh()
         binding.recBudgeting.layoutManager = LinearLayoutManager(context)
         binding.recBudgeting.adapter = budgetListAdapter
 
