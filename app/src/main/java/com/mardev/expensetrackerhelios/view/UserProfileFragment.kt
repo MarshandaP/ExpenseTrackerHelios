@@ -1,60 +1,70 @@
 package com.mardev.expensetrackerhelios.view
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mardev.expensetrackerhelios.R
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.mardev.expensetrackerhelios.databinding.FragmentUserProfileBinding
+import com.mardev.expensetrackerhelios.model.ExpenseDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UserProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UserProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentUserProfileBinding
+    private var currentUserId: Int = -1
+    private var currentPassword: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false)
+    ): View {
+        binding = FragmentUserProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UserProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val db = ExpenseDatabase.getInstance(requireContext())
+        val shared = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        currentUserId = shared.getInt("user_id", -1)
+
+        // Ambil password user sekarang dari database
+        GlobalScope.launch(Dispatchers.IO) {
+            val user = db.userDao().selectUser(currentUserId)
+            currentPassword = user.password
+        }
+
+        binding.btnChangePw.setOnClickListener {
+            val oldPw = binding.edtOldPw.text.toString()
+            val newPw = binding.edtNewPw.text.toString()
+            val repeatPw = binding.edtRepeatPw.text.toString()
+
+            if (oldPw != currentPassword) {
+                Toast.makeText(requireContext(), "Password lama salah", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (newPw != repeatPw) {
+                Toast.makeText(requireContext(), "Password baru tidak sama", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            GlobalScope.launch(Dispatchers.IO) {
+                db.userDao().updatePassword(currentUserId, newPw)
+                launch(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Password berhasil diubah", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        binding.btnSignOut.setOnClickListener {
+            shared.edit().clear().apply()
+            Navigation.findNavController(it).navigate(UserProfileFragmentDirections.actionSignOut())
+        }
     }
 }
