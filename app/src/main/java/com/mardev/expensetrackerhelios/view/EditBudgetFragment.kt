@@ -5,56 +5,53 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.mardev.expensetrackerhelios.R
+import com.mardev.expensetrackerhelios.databinding.FragmentEditBudgetBinding
+import com.mardev.expensetrackerhelios.databinding.FragmentNewBudgetBinding
+import com.mardev.expensetrackerhelios.model.Budgeting
+import com.mardev.expensetrackerhelios.viewmodel.DetailBudgetViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditBudgetFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditBudgetFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentNewBudgetBinding
+    private lateinit var viewModel: DetailBudgetViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentNewBudgetBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(DetailBudgetViewModel::class.java)
+
+        val uuid = EditBudgetFragmentArgs.fromBundle(requireArguments()).id
+
+        viewModel.fetch(uuid)
+        observeViewModel()
+
+        binding.btnAddBudget.setOnClickListener {
+            val nama = binding.txtNameBudget.text.toString()
+            val nominal = binding.txtNominalBudget.text.toString().toDoubleOrNull() ?: 0.0
+
+            if (nama.isNotEmpty() && nominal > 0) {
+                val budget = Budgeting(nama, nominal).apply { id = uuid }
+                viewModel.updateBudget(budget)
+                Navigation.findNavController(it).popBackStack()
+            } else {
+                Toast.makeText(requireContext(), "Isi nama & nominal dengan benar!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_budget, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditBudgetFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditBudgetFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun observeViewModel() {
+        viewModel.budgetLD.observe(viewLifecycleOwner) {
+            binding.txtNameBudget.setText(it.nama)
+            binding.txtNominalBudget.setText(it.nominal.toString())
+        }
     }
 }
+

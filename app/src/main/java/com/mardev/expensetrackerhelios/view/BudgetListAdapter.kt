@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mardev.expensetrackerhelios.databinding.BudgetListItemBinding
 import com.mardev.expensetrackerhelios.model.Budgeting
 
-class BudgetListAdapter(val budgetList: ArrayList<Budgeting>) :
+class BudgetListAdapter(val budgetList: ArrayList<Budgeting>,val onClick: (Budgeting) -> Unit) :
     RecyclerView.Adapter<BudgetListAdapter.BudgetViewHolder>() {
 
         class BudgetViewHolder(val binding: BudgetListItemBinding)
@@ -19,7 +19,10 @@ class BudgetListAdapter(val budgetList: ArrayList<Budgeting>) :
         }
 
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
-        holder.binding.budget = budgetList[position]
+        val budget = budgetList[position]
+        holder.binding.budget = budget
+        holder.binding.root.setOnClickListener { onClick(budget) // <<< panggil callback
+        }
     }
 
     override fun getItemCount(): Int {

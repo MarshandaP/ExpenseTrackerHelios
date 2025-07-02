@@ -18,7 +18,9 @@ import com.mardev.expensetrackerhelios.viewmodel.ListBudgetViewModel
 class BudgetingFragment : Fragment() {
     private lateinit var binding: FragmentBudgetingBinding
     private lateinit var viewModel: ListBudgetViewModel
-    val budgetListAdapter =  BudgetListAdapter(arrayListOf())
+    private lateinit var budgetListAdapter: BudgetListAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -37,6 +39,12 @@ class BudgetingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel =ViewModelProvider(this).get(ListBudgetViewModel::class.java)
+
+        budgetListAdapter = BudgetListAdapter(arrayListOf()) { budget ->
+            val action = BudgetingFragmentDirections
+                .actionEditBudget(budget.id)
+            Navigation.findNavController(view).navigate(action)
+        }
 //        viewModel.refresh()
         binding.recBudgeting.layoutManager = LinearLayoutManager(context)
         binding.recBudgeting.adapter = budgetListAdapter
@@ -45,6 +53,16 @@ class BudgetingFragment : Fragment() {
             val action = BudgetingFragmentDirections.actionNewBudget()
             Navigation.findNavController(it).navigate(action)
         }
+
+        val navController = Navigation.findNavController(requireView())
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("refresh")?.observe(
+            viewLifecycleOwner
+        ) {
+            if (it == true) {
+                viewModel.refresh()
+            }
+        }
+
 
         observeViewModel()
     }

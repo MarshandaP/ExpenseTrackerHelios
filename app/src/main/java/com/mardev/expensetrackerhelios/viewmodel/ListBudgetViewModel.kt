@@ -14,7 +14,7 @@ import kotlin.coroutines.CoroutineContext
 
 class ListBudgetViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
 
-    val budgetLD: LiveData<List<Budgeting>>  // LiveData, bukan Mutable
+    val budgetLD: LiveData<List<Budgeting>>
     val budgetLoadErrorLD = MutableLiveData<Boolean>()
     val loadingLD = MutableLiveData<Boolean>()
     private var job = Job()
@@ -32,6 +32,16 @@ class ListBudgetViewModel(application: Application) : AndroidViewModel(applicati
             val db = ExpenseDatabase.getInstance(getApplication())
             db.budgetingDao().deleteBudget(budget)
             // Tidak perlu postValue lagi — Room LiveData akan auto refresh
+        }
+    }
+
+    fun refresh() {
+        loadingLD.postValue(true)
+        launch {
+            val db = ExpenseDatabase.getInstance(getApplication())
+            val freshList = db.budgetingDao().getAllBudgets()  // suspend fun
+            (budgetLD as? MutableLiveData)?.postValue(freshList)  // force push
+            loadingLD.postValue(false)
         }
     }
 }

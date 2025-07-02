@@ -26,7 +26,7 @@ interface BudgetingDao {
     fun update(name: String, nominal: Double, id: Int)
 
     @Update
-    fun updateTodo(budget: Budgeting)
+    fun updateBudget(budget: Budgeting)
 
     @Delete
     fun deleteBudget(budget: Budgeting)

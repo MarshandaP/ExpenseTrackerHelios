@@ -2,6 +2,7 @@ package com.mardev.expensetrackerhelios.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mardev.expensetrackerhelios.model.Budgeting
 import com.mardev.expensetrackerhelios.model.ExpenseDatabase
@@ -17,6 +18,7 @@ class DetailBudgetViewModel(application: Application)
     private val job = Job()
     val budgetLD = MutableLiveData<Budgeting>()
 
+
     fun addBudget(list:List<Budgeting>) {
         launch {
             val db = ExpenseDatabase.getInstance(
@@ -27,25 +29,20 @@ class DetailBudgetViewModel(application: Application)
         }
     }
 
-//    fun fetch(uuid:Int) {
-//        launch {
-//            val db = ExpenseDatabase.buildDatabase(
-//                getApplication()
-//            )
-////            val db = buildDb(getApplication())
-//            budgetLD.postValue(db.budgetingDao().selectBudget(uuid))
-//        }
-//    }
-//
-//    fun update(title:String, notes:String, priority:Int, uuid:Int) {
-//        launch {
-//            val db = ExpenseDatabase.buildDatabase(
-//                getApplication()
-//            )
-////            val db = buildDb(getApplication())
-//            db.budgetingDao().update(nama, nominal, id)
-//        }
-//    }
+    fun fetch(uuid: Int) {
+        launch {
+            val db = ExpenseDatabase.getInstance(getApplication())
+            val budget = db.budgetingDao().selectBudget(uuid)
+            budgetLD.postValue(budget) // 🟢 INI SEKARANG VALID!
+        }
+    }
+
+    fun updateBudget(budget: Budgeting) {
+        launch {
+            val db = ExpenseDatabase.getInstance(getApplication())
+            db.budgetingDao().updateBudget(budget)
+        }
+    }
 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO

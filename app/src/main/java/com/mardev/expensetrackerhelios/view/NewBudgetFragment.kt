@@ -37,9 +37,17 @@ class NewBudgetFragment : Fragment() {
             ViewModelProvider(this).get(DetailBudgetViewModel::class.java)
 
         binding.btnAddBudget.setOnClickListener{
+            val name = binding.txtNameBudget.text.toString().trim()
+            val nominalStr = binding.txtNominalBudget.text.toString().trim()
 
             if (binding.txtNameBudget.text.isNullOrBlank() || binding.txtNominalBudget.text.isNullOrBlank()) {
                 Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val nominal = nominalStr.toDoubleOrNull()
+            if (nominal == null || nominal <= 0.0) {
+                Toast.makeText(requireContext(), "Nominal harus angka positif lebih dari 0!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 

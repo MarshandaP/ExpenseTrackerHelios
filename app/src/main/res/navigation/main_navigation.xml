@@ -55,6 +55,9 @@
         <action
             android:id="@+id/actionNewBudget"
             app:destination="@id/newBudgetFragment" />
+        <action
+            android:id="@+id/actionEditBudget"
+            app:destination="@id/editBudgetFragment" />
     </fragment>
 
     <fragment
@@ -74,4 +77,12 @@
         android:name="com.mardev.expensetrackerhelios.view.UserProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/editBudgetFragment"
+        android:name="com.mardev.expensetrackerhelios.view.EditBudgetFragment"
+        android:label="EditBudgetFragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>
