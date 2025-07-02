@@ -15,6 +15,6 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 }
 
 fun buildDb(context: Context): ExpenseDatabase {
-    val db = ExpenseDatabase.buildDatabase(context)
+    val db = ExpenseDatabase.getInstance(context)
     return db
 }
