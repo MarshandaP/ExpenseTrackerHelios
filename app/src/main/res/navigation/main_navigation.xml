@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/ItemExpenseTrack">
+    app:startDestination="@id/SignInFragment">
+
+    <!-- SIGN IN -->
+    <fragment
+        android:id="@+id/SignInFragment"
+        android:name="com.mardev.expensetrackerhelios.view.SignInFragment"
+        android:label="Sign In"
+        tools:layout="@layout/fragment_sign_in">
+
+        <!-- Tambahkan action ke SIGN UP -->
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/SignUpFragment" />
+
+        <!-- Tambahkan action ke ItemExpenseTrack (menu utama setelah login) -->
+        <action
+            android:id="@+id/actionSignIntoItemExpense"
+            app:destination="@id/ItemExpenseTrack" />
+    </fragment>
+
+    <!-- SIGN UP -->
+    <fragment
+        android:id="@+id/SignUpFragment"
+        android:name="com.mardev.expensetrackerhelios.view.SignUpFragment"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up" />
+
+    <!-- EXPENSE TRACKER (MENU UTAMA) -->
     <fragment
         android:id="@+id/ItemExpenseTrack"
         android:name="com.mardev.expensetrackerhelios.view.EkspenseTrackerFragment"
@@ -13,11 +40,13 @@
             android:id="@+id/actionNewExpense"
             app:destination="@id/newExpenseFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/newExpenseFragment"
         android:name="com.mardev.expensetrackerhelios.view.NewExpenseFragment"
         android:label="fragment_new_expense"
         tools:layout="@layout/fragment_new_expense" />
+
     <fragment
         android:id="@+id/ItemBudgeting"
         android:name="com.mardev.expensetrackerhelios.view.BudgetingFragment"
@@ -27,15 +56,19 @@
             android:id="@+id/actionNewBudget"
             app:destination="@id/newBudgetFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/newBudgetFragment"
         android:name="com.mardev.expensetrackerhelios.view.NewBudgetFragment"
         android:label="NewBudgetFragment" />
+
     <fragment
         android:id="@+id/ItemReport"
         android:name="com.mardev.expensetrackerhelios.view.ReportFragment"
         android:label="fragment_report"
         tools:layout="@layout/fragment_report" />
+
+    <!-- PROFILE -->
     <fragment
         android:id="@+id/ItemProfile"
         android:name="com.mardev.expensetrackerhelios.view.UserProfileFragment"

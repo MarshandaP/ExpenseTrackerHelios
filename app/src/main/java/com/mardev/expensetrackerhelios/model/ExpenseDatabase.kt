@@ -5,29 +5,25 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(Budgeting::class), version =  1)
+@Database(entities = [User::class, Budgeting::class], version = 1)
 abstract class ExpenseDatabase: RoomDatabase() {
+    abstract fun userDao(): UserDao
     abstract fun budgetingDao(): BudgetingDao
 
     companion object {
-        @Volatile private var instance: ExpenseDatabase ?= null
-        private val LOCK = Any()
+        @Volatile
+        private var instance: ExpenseDatabase? = null
 
-        fun buildDatabase(context: Context) =
+        fun getInstance(context: Context): ExpenseDatabase =
+            instance ?: synchronized(this) {
+                instance ?: buildDatabase(context).also { instance = it }
+            }
+
+        private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
                 ExpenseDatabase::class.java,
-                "ExpenseDatabase").build()
-                operator fun invoke(context:Context) {
-                    if(instance == null) {
-                        synchronized(LOCK) {
-                            instance ?: buildDatabase(context).also {
-                                instance = it
-                            }
-                        }
-                    }
-        }
-
+                "ExpenseDatabase"
+            ).build()
     }
-
 }
