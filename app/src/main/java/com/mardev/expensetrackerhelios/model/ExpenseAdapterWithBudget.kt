@@ -24,12 +24,16 @@ class ExpenseAdapterWithBudget(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: ExpenseWithBudget) {
-            val formatter = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+            val formatter = SimpleDateFormat("dd MMM yyyy HH.mm", Locale("id", "ID"))
             binding.txtDate.text = formatter.format(Date(data.expense.date))
-            binding.txtAmount.text = "Rp ${data.expense.amount.toInt()}"
+            binding.txtAmount.text = "IDR %,d".format(data.expense.amount.toInt())
             binding.chipBudget.text = data.budget.nama
 
+            // Klik chip atau nominal sama-sama tampilkan detail
             binding.txtAmount.setOnClickListener {
+                onClick(data)
+            }
+            binding.chipBudget.setOnClickListener {
                 onClick(data)
             }
         }

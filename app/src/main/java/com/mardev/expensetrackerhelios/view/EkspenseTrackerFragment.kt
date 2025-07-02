@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mardev.expensetrackerhelios.databinding.FragmentEkspenseTrackerBinding
+import com.mardev.expensetrackerhelios.databinding.DialogExpenseDetailBinding
 import com.mardev.expensetrackerhelios.model.ExpenseDatabase
 import com.mardev.expensetrackerhelios.model.ExpenseWithBudget
 import kotlinx.coroutines.Dispatchers
@@ -55,19 +59,22 @@ class EkspenseTrackerFragment : Fragment() {
     }
 
     private fun showExpenseDialog(data: ExpenseWithBudget) {
-        val formatter = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
-        val dateText = formatter.format(Date(data.expense.date))
-        val message = """
-            Tanggal     : $dateText
-            Nominal     : Rp ${data.expense.amount.toInt()}
-            Budget      : ${data.budget.nama}
-            Keterangan  : ${data.expense.note}
-        """.trimIndent()
+        val dialogBinding = DialogExpenseDetailBinding.inflate(layoutInflater)
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Detail Pengeluaran")
-            .setMessage(message)
-            .setPositiveButton("OK", null)
-            .show()
+        val formatter = SimpleDateFormat("dd MMM yyyy HH.mm", Locale("id", "ID"))
+        dialogBinding.txtDialogDate.text = formatter.format(Date(data.expense.date))
+        dialogBinding.txtDialogNote.text = data.expense.note
+        dialogBinding.txtDialogAmount.text = "IDR %,d".format(data.expense.amount.toInt())
+        dialogBinding.chipDialogBudget.text = data.budget.nama
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+
+        dialogBinding.btnDialogClose.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
