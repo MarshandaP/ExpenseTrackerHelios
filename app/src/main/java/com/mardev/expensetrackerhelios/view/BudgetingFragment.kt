@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.mardev.expensetrackerhelios.R
 import com.mardev.expensetrackerhelios.databinding.FragmentBudgetingBinding
+import com.mardev.expensetrackerhelios.viewmodel.ListBudgetViewModel
 
 
 class BudgetingFragment : Fragment() {
     private lateinit var binding: FragmentBudgetingBinding
+    private lateinit var viewModel: ListBudgetViewModel
+    private val
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

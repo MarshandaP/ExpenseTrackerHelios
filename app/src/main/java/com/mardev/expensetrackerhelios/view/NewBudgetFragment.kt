@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mardev.expensetrackerhelios.R
+import com.mardev.expensetrackerhelios.databinding.FragmentNewBudgetBinding
 
 class NewBudgetFragment : Fragment() {
+    private lateinit var binding: FragmentNewBudgetBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
