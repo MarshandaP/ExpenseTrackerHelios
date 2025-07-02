@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase
 abstract class ExpenseDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun budgetingDao(): BudgetingDao
+    abstract fun expenseDao(): ExpenseDao
 
     companion object {
         @Volatile
