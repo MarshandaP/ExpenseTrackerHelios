@@ -21,7 +21,8 @@ import java.util.*
 
 class NewExpenseFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewExpenseBinding
+    private var _binding: FragmentNewExpenseBinding? = null
+    private val binding get() = _binding!!
     private lateinit var budgetList: List<Budgeting>
     private var selectedBudget: Budgeting? = null
     private var totalUsed: Double = 0.0
@@ -30,7 +31,7 @@ class NewExpenseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNewExpenseBinding.inflate(inflater, container, false)
+        _binding = FragmentNewExpenseBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,23 +40,32 @@ class NewExpenseFragment : Fragment() {
         val today = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID")).format(Date())
         binding.txtDate.setText(today)
 
-        // Load budgets into spinner
         lifecycleScope.launch {
             budgetList = withContext(Dispatchers.IO) {
                 db.budgetingDao().getAllBudgets()
             }
 
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, budgetList.map { it.nama })
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                budgetList.map { it.nama }
+            )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinKategori.adapter = adapter
 
-            binding.spinKategori.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: android.widget.AdapterView<*>, view: View?, position: Int, id: Long) {
+            binding.spinKategori.onItemSelectedListener = object :
+                android.widget.AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: android.widget.AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
                     selectedBudget = budgetList[position]
                     updateProgressBar()
                 }
 
-                override fun onNothingSelected(parent: android.widget.AdapterView<*>) { }
+                override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
             }
         }
 
@@ -108,5 +118,10 @@ class NewExpenseFragment : Fragment() {
             val progress = ((remaining / selectedBudget!!.nominal) * 100).toInt()
             binding.progressBarExpense.progress = progress
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
