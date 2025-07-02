@@ -35,7 +35,7 @@ class NewExpenseFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val db = ExpenseDatabase.getDatabase(requireContext())
+        val db = ExpenseDatabase.getInstance(requireContext())
         val today = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID")).format(Date())
         binding.txtDate.setText(today)
 
@@ -49,9 +49,13 @@ class NewExpenseFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinKategori.adapter = adapter
 
-            binding.spinKategori.setOnItemSelectedListener { _, _, position, _ ->
-                selectedBudget = budgetList[position]
-                updateProgressBar()
+            binding.spinKategori.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: android.widget.AdapterView<*>, view: View?, position: Int, id: Long) {
+                    selectedBudget = budgetList[position]
+                    updateProgressBar()
+                }
+
+                override fun onNothingSelected(parent: android.widget.AdapterView<*>) { }
             }
         }
 
@@ -94,7 +98,7 @@ class NewExpenseFragment : Fragment() {
     }
 
     private fun updateProgressBar() {
-        val db = ExpenseDatabase.getDatabase(requireContext())
+        val db = ExpenseDatabase.getInstance(requireContext())
 
         lifecycleScope.launch {
             totalUsed = withContext(Dispatchers.IO) {

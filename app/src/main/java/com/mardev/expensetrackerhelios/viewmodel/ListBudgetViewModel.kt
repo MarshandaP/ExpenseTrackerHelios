@@ -24,7 +24,7 @@ class ListBudgetViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         val db = ExpenseDatabase.getInstance(getApplication())
-        budgetLD = db.budgetingDao().selectAllBudget()
+        budgetLD = db.budgetingDao().selectAllBudgets()
     }
 
     fun clearTask(budget: Budgeting) {

@@ -3,7 +3,7 @@ package com.mardev.expensetrackerhelios.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "expense")
+@Entity(tableName = "Expense")
 data class Expense(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
