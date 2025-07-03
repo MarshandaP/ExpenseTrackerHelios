@@ -5,9 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mardev.expensetrackerhelios.R
+import com.mardev.expensetrackerhelios.databinding.FragmentReportBinding
+import com.mardev.expensetrackerhelios.model.ExpenseDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReportFragment : Fragment() {
+
+    private lateinit var binding: FragmentReportBinding
+    private lateinit var adapter: ReportAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +29,29 @@ class ReportFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false)
+        binding = FragmentReportBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val db = ExpenseDatabase.getInstance(requireContext())
+
+        adapter = ReportAdapter()
+        binding.recyclerViewReport.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewReport.adapter = adapter
+
+        lifecycleScope.launch {
+            val budgetsWithExpenses = withContext(Dispatchers.IO) {
+                db.budgetingDao().getBudgetsWithExpenses()
+            }
+
+            adapter.submitList(budgetsWithExpenses)
+
+            // Hitung total terpakai & total budget
+            val totalExpense = budgetsWithExpenses.sumOf { it.totalExpense }
+            val totalBudget = budgetsWithExpenses.sumOf { it.budget.nominal }
+            binding.totalBudgetTextView.text = "Rp ${totalExpense.toInt()} / Rp ${totalBudget.toInt()}"
+        }
     }
 
 }

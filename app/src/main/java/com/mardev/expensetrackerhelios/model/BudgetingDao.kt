@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 
 @Dao
@@ -24,6 +25,11 @@ interface BudgetingDao {
 
     @Query("UPDATE budgeting SET Name_Budget=:name, Nominal_Budget=:nominal WHERE id = :id")
     fun update(name: String, nominal: Double, id: Int)
+
+
+    @Transaction
+    @Query("SELECT * FROM budgeting")
+    fun getBudgetsWithExpenses(): List<BudgetWithExpenses>
 
     @Update
     fun updateBudget(budget: Budgeting)
