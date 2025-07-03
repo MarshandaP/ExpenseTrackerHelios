@@ -60,9 +60,12 @@ class NewExpenseFragment : Fragment() {
             dialog.show()
         }
 
+        val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+        val username = prefs.getString("username", "") ?: ""
+
         lifecycleScope.launch {
             budgetList = withContext(Dispatchers.IO) {
-                db.budgetingDao().getAllBudgets()
+                db.budgetingDao().getBudgetsByUser(username)
             }
 
             val adapter = ArrayAdapter(

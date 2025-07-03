@@ -1,5 +1,6 @@
 package com.mardev.expensetrackerhelios.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +36,10 @@ class EkspenseTrackerFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(ExpenseTrackerViewModel::class.java)
 
-        adapter = ExpenseAdapterWithBudget { expenseWithBudget ->
+        val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+        val username = prefs.getString("username", "") ?: ""
+
+        adapter = ExpenseAdapterWithBudget(username) { expenseWithBudget ->
             showExpenseDialog(expenseWithBudget)
         }
 

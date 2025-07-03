@@ -9,12 +9,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ExpenseAdapterWithBudget(
+    private val username: String,
     private val onClick: (ExpenseWithBudget) -> Unit
 ) : RecyclerView.Adapter<ExpenseAdapterWithBudget.ExpenseViewHolder>() {
 
     private val list = mutableListOf<ExpenseWithBudget>()
 
     fun submitList(newList: List<ExpenseWithBudget>) {
+        val filtered = newList.filter { it.budget.username == username }
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
