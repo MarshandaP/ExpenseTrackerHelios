@@ -45,7 +45,8 @@ class BudgetingFragment : Fragment() {
                 .actionEditBudget(budget.id)
             Navigation.findNavController(view).navigate(action)
         }
-//        viewModel.refresh()
+
+        viewModel.refresh()
         binding.recBudgeting.layoutManager = LinearLayoutManager(context)
         binding.recBudgeting.adapter = budgetListAdapter
 

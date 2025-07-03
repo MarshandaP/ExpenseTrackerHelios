@@ -33,7 +33,7 @@ class DetailBudgetViewModel(application: Application)
         launch {
             val db = ExpenseDatabase.getInstance(getApplication())
             val budget = db.budgetingDao().selectBudget(uuid)
-            budgetLD.postValue(budget) // 🟢 INI SEKARANG VALID!
+            budgetLD.postValue(budget)
         }
     }
 
