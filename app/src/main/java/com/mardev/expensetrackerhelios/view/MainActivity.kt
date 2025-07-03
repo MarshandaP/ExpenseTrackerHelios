@@ -41,6 +41,23 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNav.visibility = View.VISIBLE
                 }
             }
+
+            val noUpFragments = setOf(
+                R.id.ItemExpenseTrack,
+                R.id.ItemBudgeting,
+                R.id.ItemReport,
+                R.id.ItemProfile,
+                R.id.SignInFragment
+
+            )
+            if (destination.id in noUpFragments) {
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            } else {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+
+            supportActionBar?.title = "Helios Expense Tracker"
+
         }
 
 

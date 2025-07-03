@@ -71,10 +71,6 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
-
-        binding.back.setOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
     override fun onDestroyView() {
