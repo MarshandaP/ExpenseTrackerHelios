@@ -1,59 +1,61 @@
 package com.mardev.expensetrackerhelios.view
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mardev.expensetrackerhelios.R
 import com.mardev.expensetrackerhelios.databinding.FragmentReportBinding
-import com.mardev.expensetrackerhelios.model.ExpenseDatabase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.mardev.expensetrackerhelios.viewmodel.ReportViewModel
 
 class ReportFragment : Fragment() {
 
     private lateinit var binding: FragmentReportBinding
     private lateinit var adapter: ReportAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
+    private lateinit var viewModel: ReportViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentReportBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val db = ExpenseDatabase.getInstance(requireContext())
+        super.onViewCreated(view, savedInstanceState)
 
         adapter = ReportAdapter()
         binding.recyclerViewReport.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewReport.adapter = adapter
 
-        lifecycleScope.launch {
-            val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
-            val username = prefs.getString("username", "") ?: ""
-            val budgetsWithExpenses = withContext(Dispatchers.IO) {
-                db.budgetingDao().getBudgetsWithExpensesByUser(username)
+        viewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
+        viewModel.refresh()
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.reportLD.observe(viewLifecycleOwner, Observer { budgetsWithExpenses ->
+            budgetsWithExpenses?.let {
+                adapter.submitList(it)
+                // Hitung total
+                val totalExpense = it.sumOf { item -> item.totalExpense }
+                val totalBudget = it.sumOf { item -> item.budget.nominal }
+                binding.totalBudgetTextView.text = "Rp ${totalExpense.toInt()} / Rp ${totalBudget.toInt()}"
             }
+        })
 
-            adapter.submitList(budgetsWithExpenses)
+        viewModel.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.recyclerViewReport.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.totalBudgetTextView.visibility = if (isLoading) View.GONE else View.VISIBLE
+        })
 
-            // Hitung total terpakai & total budget
-            val totalExpense = budgetsWithExpenses.sumOf { it.totalExpense }
-            val totalBudget = budgetsWithExpenses.sumOf { it.budget.nominal }
-            binding.totalBudgetTextView.text = "Rp ${totalExpense.toInt()} / Rp ${totalBudget.toInt()}"
-        }
+        viewModel.errorLD.observe(viewLifecycleOwner, Observer { isError ->
+            // Kalau mau, bisa munculkan error UI
+        })
     }
 }

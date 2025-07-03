@@ -1,25 +1,18 @@
 package com.mardev.expensetrackerhelios.view
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mardev.expensetrackerhelios.databinding.FragmentEkspenseTrackerBinding
 import com.mardev.expensetrackerhelios.databinding.DialogExpenseDetailBinding
-import com.mardev.expensetrackerhelios.model.ExpenseDatabase
 import com.mardev.expensetrackerhelios.model.ExpenseWithBudget
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.mardev.expensetrackerhelios.viewmodel.ExpenseTrackerViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +20,7 @@ class EkspenseTrackerFragment : Fragment() {
 
     private lateinit var binding: FragmentEkspenseTrackerBinding
     private lateinit var adapter: ExpenseAdapterWithBudget
+    private lateinit var viewModel: ExpenseTrackerViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +31,9 @@ class EkspenseTrackerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val db = ExpenseDatabase.getInstance(requireContext())
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(ExpenseTrackerViewModel::class.java)
 
         adapter = ExpenseAdapterWithBudget { expenseWithBudget ->
             showExpenseDialog(expenseWithBudget)
@@ -46,19 +42,34 @@ class EkspenseTrackerFragment : Fragment() {
         binding.recExpense.layoutManager = LinearLayoutManager(requireContext())
         binding.recExpense.adapter = adapter
 
-        val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
-        val username = prefs.getString("username", "") ?: ""
-
-        lifecycleScope.launch {
-            val expenses = withContext(Dispatchers.IO) {
-                db.expenseDao().getExpensesWithBudgetByUser(username)
-            }
-            adapter.submitList(expenses)
-        }
+        viewModel.refresh()
+        observeViewModel()
 
         binding.btnExpense.setOnClickListener {
             val action = EkspenseTrackerFragmentDirections.actionNewExpense()
             Navigation.findNavController(it).navigate(action)
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.expenseLD.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.loadingLD.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading == true) {
+                binding.recExpense.visibility = View.GONE
+                binding.progressLoad.visibility = View.VISIBLE
+            } else {
+                binding.recExpense.visibility = View.VISIBLE
+                binding.progressLoad.visibility = View.GONE
+            }
+        }
+
+        viewModel.expenseLoadErrorLD.observe(viewLifecycleOwner) { isError ->
+            if (isError == true) {
+                // Tampilkan pesan error jika mau
+            }
         }
     }
 
