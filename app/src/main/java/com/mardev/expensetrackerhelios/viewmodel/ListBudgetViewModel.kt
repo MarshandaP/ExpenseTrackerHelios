@@ -1,6 +1,7 @@
 package com.mardev.expensetrackerhelios.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 
 class ListBudgetViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
 
-    val budgetLD: LiveData<List<Budgeting>>
+    val budgetLD = MutableLiveData<List<Budgeting>>()
     val budgetLoadErrorLD = MutableLiveData<Boolean>()
     val loadingLD = MutableLiveData<Boolean>()
     private var job = Job()
@@ -23,14 +24,16 @@ class ListBudgetViewModel(application: Application) : AndroidViewModel(applicati
         get() = job + Dispatchers.IO
 
     init {
-        val db = ExpenseDatabase.getInstance(getApplication())
-        budgetLD = db.budgetingDao().selectAllBudgets()
+//        val db = ExpenseDatabase.getInstance(getApplication())
+//        budgetLD = db.budgetingDao().selectAllBudgets()
+        refresh()
     }
 
     fun clearTask(budget: Budgeting) {
         launch {
             val db = ExpenseDatabase.getInstance(getApplication())
             db.budgetingDao().deleteBudget(budget)
+            refresh()
         }
     }
 
@@ -38,7 +41,10 @@ class ListBudgetViewModel(application: Application) : AndroidViewModel(applicati
         loadingLD.postValue(true)
         launch {
             val db = ExpenseDatabase.getInstance(getApplication())
-            val freshList = db.budgetingDao().getAllBudgets()
+//            val freshList = db.budgetingDao().getAllBudgets()
+            val prefs = getApplication<Application>().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+            val username = prefs.getString("username", "") ?: ""
+            val freshList = db.budgetingDao().getBudgetsByUser(username)
             (budgetLD as? MutableLiveData)?.postValue(freshList)
             loadingLD.postValue(false)
         }

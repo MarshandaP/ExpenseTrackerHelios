@@ -26,6 +26,8 @@ class NewExpenseFragment : Fragment() {
     private lateinit var budgetList: List<Budgeting>
     private var selectedBudget: Budgeting? = null
     private var totalUsed: Double = 0.0
+    private var selectedDate: Long = System.currentTimeMillis() / 1000
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +41,23 @@ class NewExpenseFragment : Fragment() {
         val db = ExpenseDatabase.getInstance(requireContext())
         val today = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID")).format(Date())
         binding.txtDate.setText(today)
+        binding.txtDate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val dialog = android.app.DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    calendar.set(year, month, dayOfMonth)
+                    selectedDate = calendar.timeInMillis / 1000
+                    val formatted = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+                        .format(Date(calendar.timeInMillis))
+                    binding.txtDate.setText(formatted)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            dialog.show()
+        }
 
         lifecycleScope.launch {
             budgetList = withContext(Dispatchers.IO) {
@@ -93,7 +112,7 @@ class NewExpenseFragment : Fragment() {
             val expense = Expense(
                 amount = nominal,
                 note = notes,
-                date = System.currentTimeMillis(),
+                date = selectedDate,
                 budgetId = selectedBudget!!.id
             )
 

@@ -62,7 +62,7 @@ class EkspenseTrackerFragment : Fragment() {
         val dialogBinding = DialogExpenseDetailBinding.inflate(layoutInflater)
 
         val formatter = SimpleDateFormat("dd MMM yyyy HH.mm", Locale("id", "ID"))
-        dialogBinding.txtDialogDate.text = formatter.format(Date(data.expense.date))
+        dialogBinding.txtDialogDate.text = formatter.format(Date(data.expense.date * 1000))
         dialogBinding.txtDialogNote.text = data.expense.note
         dialogBinding.txtDialogAmount.text = "IDR %,d".format(data.expense.amount.toInt())
         dialogBinding.chipDialogBudget.text = data.budget.nama

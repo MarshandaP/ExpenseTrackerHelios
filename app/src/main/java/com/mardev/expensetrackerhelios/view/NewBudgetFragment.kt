@@ -1,5 +1,6 @@
 package com.mardev.expensetrackerhelios.view
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -51,9 +52,12 @@ class NewBudgetFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+
             var budget = Budgeting(
                 binding.txtNameBudget.text.toString(),
-                binding.txtNominalBudget.text.toString().toDoubleOrNull() ?: 0.0
+                binding.txtNominalBudget.text.toString().toDoubleOrNull() ?: 0.0,
+                prefs.getString("username", "") ?: ""
             )
 
             val list = listOf(budget)
@@ -62,6 +66,4 @@ class NewBudgetFragment : Fragment() {
             Navigation.findNavController(it).popBackStack()
         }
     }
-
-
 }

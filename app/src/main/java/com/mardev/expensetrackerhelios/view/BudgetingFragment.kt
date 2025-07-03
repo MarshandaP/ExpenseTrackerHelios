@@ -72,7 +72,7 @@ class BudgetingFragment : Fragment() {
             budgetListAdapter.updateBudgetlist(it)
             if(it.isEmpty()) {
                 binding.recBudgeting?.visibility = View.GONE
-                binding.txtError.setText("Your todo still empty.")
+                binding.txtError.setText("Your Budget still empty.")
             } else {
                 binding.recBudgeting?.visibility = View.VISIBLE
             }

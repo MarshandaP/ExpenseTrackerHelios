@@ -26,6 +26,8 @@ interface BudgetingDao {
     @Query("UPDATE budgeting SET Name_Budget=:name, Nominal_Budget=:nominal WHERE id = :id")
     fun update(name: String, nominal: Double, id: Int)
 
+    @Query("SELECT * FROM Budgeting WHERE username = :username")
+    suspend fun getBudgetsByUser(username: String): List<Budgeting>
 
     @Transaction
     @Query("SELECT * FROM budgeting")

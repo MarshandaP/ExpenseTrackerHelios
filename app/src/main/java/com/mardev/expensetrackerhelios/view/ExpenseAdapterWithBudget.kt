@@ -25,7 +25,7 @@ class ExpenseAdapterWithBudget(
 
         fun bind(data: ExpenseWithBudget) {
             val formatter = SimpleDateFormat("dd MMM yyyy HH.mm", Locale("id", "ID"))
-            binding.txtDate.text = formatter.format(Date(data.expense.date))
+            binding.txtDate.text = formatter.format(Date(data.expense.date *1000))
             binding.txtAmount.text = "IDR %,d".format(data.expense.amount.toInt())
             binding.chipBudget.text = data.budget.nama
 

@@ -37,12 +37,14 @@ class EditBudgetFragment : Fragment() {
             val nama = binding.txtNameBudget.text.toString()
             val nominal = binding.txtNominalBudget.text.toString().toDoubleOrNull() ?: 0.0
 
-            if (nama.isNotEmpty() && nominal > 0) {
-                val budget = Budgeting(nama, nominal).apply { id = uuid }
+            val oldBudget = viewModel.budgetLD.value
+
+            if (oldBudget != null) {
+                val budget = Budgeting(nama, nominal, oldBudget.username).apply { id = uuid }
                 viewModel.updateBudget(budget)
                 Navigation.findNavController(it).popBackStack()
             } else {
-                Toast.makeText(requireContext(), "Isi nama & nominal dengan benar!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Data lama tidak ditemukan!", Toast.LENGTH_SHORT).show()
             }
         }
     }

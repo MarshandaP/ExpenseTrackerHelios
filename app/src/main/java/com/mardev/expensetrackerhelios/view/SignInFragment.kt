@@ -1,5 +1,6 @@
 package com.mardev.expensetrackerhelios.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +44,8 @@ class SignInFragment : Fragment() {
                 requireActivity().runOnUiThread {
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     if (success) {
+                        val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+                        prefs.edit().putString("username", username).apply()
                         findNavController().navigate(R.id.actionSignIntoItemExpense)
                     }
                 }
