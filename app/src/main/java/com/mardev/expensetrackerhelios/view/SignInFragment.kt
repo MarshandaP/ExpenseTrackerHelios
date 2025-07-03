@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.mardev.expensetrackerhelios.R
 import com.mardev.expensetrackerhelios.databinding.FragmentSignInBinding
@@ -46,7 +47,12 @@ class SignInFragment : Fragment() {
                     if (success) {
                         val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
                         prefs.edit().putString("username", username).apply()
-                        findNavController().navigate(R.id.actionSignIntoItemExpense)
+                        findNavController().navigate(
+                            R.id.actionSignIntoItemExpense,
+                            null,
+                            NavOptions.Builder()
+                                .setPopUpTo(R.id.SignInFragment, true).build()
+                        )
                     }
                 }
             }

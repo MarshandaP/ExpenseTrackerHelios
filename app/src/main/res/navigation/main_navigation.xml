@@ -20,7 +20,9 @@
         <!-- Tambahkan action ke ItemExpenseTrack (menu utama setelah login) -->
         <action
             android:id="@+id/actionSignIntoItemExpense"
-            app:destination="@id/ItemExpenseTrack" />
+            app:destination="@id/ItemExpenseTrack"
+            app:popUpTo="@id/SignInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- SIGN UP -->
@@ -28,7 +30,11 @@
         android:id="@+id/SignUpFragment"
         android:name="com.mardev.expensetrackerhelios.view.SignUpFragment"
         android:label="Sign Up"
-        tools:layout="@layout/fragment_sign_up" />
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/actionSignUptoSignIn"
+            app:destination="@id/SignInFragment" />
+    </fragment>
 
     <!-- EXPENSE TRACKER (MENU UTAMA) -->
     <fragment

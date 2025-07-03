@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import com.mardev.expensetrackerhelios.R
 import com.mardev.expensetrackerhelios.databinding.FragmentSignUpBinding
 import com.mardev.expensetrackerhelios.model.ExpenseDatabase
 import com.mardev.expensetrackerhelios.model.User
@@ -57,16 +60,20 @@ class SignUpFragment : Fragment() {
                 requireActivity().runOnUiThread {
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     if (success) {
-                        // Navigasi ke SignInFragment (aktifkan jika sudah setup nav graph)
-                        // findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+                        findNavController().navigate(
+                            R.id.actionSignUptoSignIn,
+                            null,
+                            NavOptions.Builder()
+                                .setPopUpTo(R.id.SignUpFragment, true)
+                                .build()
+                        )
                     }
                 }
             }
         }
 
         binding.back.setOnClickListener {
-            // Navigasi balik ke SignInFragment
-            // findNavController().navigateUp()
+            findNavController().navigateUp()
         }
     }
 

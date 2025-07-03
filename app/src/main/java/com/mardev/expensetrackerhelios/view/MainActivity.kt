@@ -1,6 +1,7 @@
 package com.mardev.expensetrackerhelios.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -30,6 +31,17 @@ class MainActivity : AppCompatActivity() {
                     as NavHostFragment).navController
         NavigationUI.setupActionBarWithNavController(this, navController)
         binding.bottomNav.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.SignInFragment, R.id.SignUpFragment -> {
+                    binding.bottomNav.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNav.visibility = View.VISIBLE
+                }
+            }
+        }
 
 
 //        val fragments:ArrayList<Fragment> = ArrayList()
