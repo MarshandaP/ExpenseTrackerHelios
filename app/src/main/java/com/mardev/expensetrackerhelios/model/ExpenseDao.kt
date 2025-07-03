@@ -27,6 +27,13 @@ interface ExpenseDao {
     @Query("SELECT * FROM Expense ORDER BY date DESC")
     suspend fun getAllExpensesWithBudget(): List<ExpenseWithBudget>
 
+    @Transaction
+    @Query("""
+    SELECT * FROM Expense 
+    WHERE username = :username
+    ORDER BY date DESC""")
+    suspend fun getExpensesWithBudgetByUser(username: String): List<ExpenseWithBudget>
+
     @Insert
     suspend fun insertExpense(expense: Expense)
 
