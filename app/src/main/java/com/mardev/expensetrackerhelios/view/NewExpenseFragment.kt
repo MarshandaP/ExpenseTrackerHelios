@@ -29,7 +29,6 @@ class NewExpenseFragment : Fragment() {
     private var totalUsed: Double = 0.0
     private var selectedDate: Long = System.currentTimeMillis() / 1000
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,6 +63,7 @@ class NewExpenseFragment : Fragment() {
         val username = prefs.getString("username", "") ?: ""
 
         lifecycleScope.launch {
+            // Ambil hanya budget milik user login
             budgetList = withContext(Dispatchers.IO) {
                 db.budgetingDao().getBudgetsByUser(username)
             }
@@ -113,9 +113,6 @@ class NewExpenseFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
-            val username = prefs.getString("username", "") ?: ""
-
             val expense = Expense(
                 amount = nominal,
                 note = notes,
@@ -141,8 +138,15 @@ class NewExpenseFragment : Fragment() {
             totalUsed = withContext(Dispatchers.IO) {
                 db.expenseDao().getExpensesForBudgetNow(selectedBudget!!.id).sumOf { it.amount }
             }
-            val remaining = (selectedBudget!!.nominal - totalUsed).coerceAtLeast(0.0)
-            val progress = ((remaining / selectedBudget!!.nominal) * 100).toInt()
+
+            val totalBudget = selectedBudget!!.nominal
+            val remaining = (totalBudget - totalUsed).coerceAtLeast(0.0)
+            val progress = ((remaining / totalBudget) * 100).toInt()
+
+            // ✅ Tampilkan total budget & total terpakai ke TextView
+            binding.txtTotal.text = "Rp ${totalBudget.toInt()}"
+            binding.txtUang.text = "Rp ${totalUsed.toInt()}"
+
             binding.progressBarExpense.progress = progress
         }
     }

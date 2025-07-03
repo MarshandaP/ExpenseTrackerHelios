@@ -64,7 +64,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="318dp"
             android:layout_height="31dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="35dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent"
@@ -118,6 +118,26 @@
             app:layout_constraintHorizontal_bias="0.888"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtKeterangan" />
+
+        <TextView
+            android:id="@+id/txtUang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/progressBarExpense"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinKategori" />
+
+        <TextView
+            android:id="@+id/txtTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/progressBarExpense"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinKategori" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

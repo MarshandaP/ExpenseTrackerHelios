@@ -21,7 +21,7 @@ class BudgetListAdapter(val budgetList: ArrayList<Budgeting>,val onClick: (Budge
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
         val budget = budgetList[position]
         holder.binding.txtNamaBud2.text = budget.nama
-        holder.binding.txtNomBud2.text = budget.nominal.toString()
+        holder.binding.txtNomBud2.text = "Rp ${budget.nominal.toString()}"
         holder.binding.root.setOnClickListener { onClick(budget)
         }
     }
