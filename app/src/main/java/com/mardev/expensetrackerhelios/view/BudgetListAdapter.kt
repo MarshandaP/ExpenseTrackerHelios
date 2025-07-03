@@ -21,7 +21,7 @@ class BudgetListAdapter(val budgetList: ArrayList<Budgeting>,val onClick: (Budge
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
         val budget = budgetList[position]
         holder.binding.budget = budget
-        holder.binding.root.setOnClickListener { onClick(budget) // <<< panggil callback
+        holder.binding.root.setOnClickListener { onClick(budget)
         }
     }
 
@@ -29,9 +29,9 @@ class BudgetListAdapter(val budgetList: ArrayList<Budgeting>,val onClick: (Budge
         return budgetList.size
     }
 
-    fun updateBudgetlist(newBudgetList: List<Budgeting>){
+    fun updateBudgetlist(editBudgetList: List<Budgeting>){
         budgetList.clear()
-        budgetList.addAll(newBudgetList)
+        budgetList.addAll(editBudgetList)
         notifyDataSetChanged()
     }
 }

@@ -16,11 +16,11 @@ import com.mardev.expensetrackerhelios.model.Budgeting
 import com.mardev.expensetrackerhelios.viewmodel.DetailBudgetViewModel
 
 class EditBudgetFragment : Fragment() {
-    private lateinit var binding: FragmentNewBudgetBinding
+    private lateinit var binding: FragmentEditBudgetBinding
     private lateinit var viewModel: DetailBudgetViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentNewBudgetBinding.inflate(inflater, container, false)
+        binding = FragmentEditBudgetBinding.inflate(inflater, container, false)
         return binding.root
     }
 

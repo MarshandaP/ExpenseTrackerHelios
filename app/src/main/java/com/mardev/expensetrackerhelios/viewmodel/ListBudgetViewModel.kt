@@ -31,7 +31,6 @@ class ListBudgetViewModel(application: Application) : AndroidViewModel(applicati
         launch {
             val db = ExpenseDatabase.getInstance(getApplication())
             db.budgetingDao().deleteBudget(budget)
-            // Tidak perlu postValue lagi — Room LiveData akan auto refresh
         }
     }
 
@@ -39,8 +38,8 @@ class ListBudgetViewModel(application: Application) : AndroidViewModel(applicati
         loadingLD.postValue(true)
         launch {
             val db = ExpenseDatabase.getInstance(getApplication())
-            val freshList = db.budgetingDao().getAllBudgets()  // suspend fun
-            (budgetLD as? MutableLiveData)?.postValue(freshList)  // force push
+            val freshList = db.budgetingDao().getAllBudgets()
+            (budgetLD as? MutableLiveData)?.postValue(freshList)
             loadingLD.postValue(false)
         }
     }

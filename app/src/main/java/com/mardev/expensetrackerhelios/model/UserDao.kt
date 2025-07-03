@@ -16,11 +16,11 @@ interface UserDao {
     @Query("SELECT COUNT(*) FROM users WHERE username = :username")
     suspend fun checkUsernameExist(username: String): Int
 
-    // ✅ Tambahan untuk ambil user by ID (untuk validasi password)
-    @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
-    suspend fun selectUser(userId: Int): User
-
-    // ✅ Update password
-    @Query("UPDATE users SET password = :newPassword WHERE id = :userId")
-    suspend fun updatePassword(userId: Int, newPassword: String)
+//    // ✅ Tambahan untuk ambil user by ID (untuk validasi password)
+//    @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
+//    suspend fun selectUser(userId: Int): User
+//
+//    // ✅ Update password
+//    @Query("UPDATE users SET password = :newPassword WHERE id = :userId")
+//    suspend fun updatePassword(userId: Int, newPassword: String)
 }

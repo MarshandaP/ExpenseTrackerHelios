@@ -85,7 +85,7 @@
                 android:id="@+id/txtNominalExpense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nominal"
+                android:hint="         Nominal"
                 tools:layout_editor_absoluteX="12dp"
                 tools:layout_editor_absoluteY="377dp" />
         </com.google.android.material.textfield.TextInputLayout>
