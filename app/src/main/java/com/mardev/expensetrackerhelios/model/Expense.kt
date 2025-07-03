@@ -10,5 +10,6 @@ data class Expense(
     val amount: Double,
     val note: String,
     val date: Long,
-    val budgetId: Int
+    val budgetId: Int,
+    val username: String
 )

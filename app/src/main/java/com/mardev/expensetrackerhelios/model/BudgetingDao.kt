@@ -30,6 +30,11 @@ interface BudgetingDao {
     suspend fun getBudgetsByUser(username: String): List<Budgeting>
 
     @Transaction
+    @Query("SELECT * FROM budgeting WHERE username = :username")
+    fun getBudgetsWithExpensesByUser(username: String): List<BudgetWithExpenses>
+
+
+    @Transaction
     @Query("SELECT * FROM budgeting")
     fun getBudgetsWithExpenses(): List<BudgetWithExpenses>
 

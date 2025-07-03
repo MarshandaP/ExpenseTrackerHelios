@@ -1,5 +1,6 @@
 package com.mardev.expensetrackerhelios.view
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -41,8 +42,10 @@ class ReportFragment : Fragment() {
         binding.recyclerViewReport.adapter = adapter
 
         lifecycleScope.launch {
+            val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+            val username = prefs.getString("username", "") ?: ""
             val budgetsWithExpenses = withContext(Dispatchers.IO) {
-                db.budgetingDao().getBudgetsWithExpenses()
+                db.budgetingDao().getBudgetsWithExpensesByUser(username)
             }
 
             adapter.submitList(budgetsWithExpenses)
@@ -53,5 +56,4 @@ class ReportFragment : Fragment() {
             binding.totalBudgetTextView.text = "Rp ${totalExpense.toInt()} / Rp ${totalBudget.toInt()}"
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package com.mardev.expensetrackerhelios.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -109,11 +110,15 @@ class NewExpenseFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            val prefs = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+            val username = prefs.getString("username", "") ?: ""
+
             val expense = Expense(
                 amount = nominal,
                 note = notes,
                 date = selectedDate,
-                budgetId = selectedBudget!!.id
+                budgetId = selectedBudget!!.id,
+                username = username
             )
 
             lifecycleScope.launch {
