@@ -41,17 +41,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-            <TextView
-                android:id="@+id/txtError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/recBudgeting"
-                app:layout_constraintEnd_toEndOf="@+id/recBudgeting"
-                app:layout_constraintHorizontal_bias="0.819"
-                app:layout_constraintStart_toStartOf="@+id/recBudgeting"
-                app:layout_constraintTop_toTopOf="@+id/recBudgeting"
-                app:layout_constraintVertical_bias="0.601" />
-
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnBudget"
                 android:layout_width="wrap_content"

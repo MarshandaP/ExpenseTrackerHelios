@@ -73,7 +73,6 @@ class BudgetingFragment : Fragment() {
             budgetListAdapter.updateBudgetlist(it)
             if(it.isEmpty()) {
                 binding.recBudgeting?.visibility = View.GONE
-                binding.txtError.setText("Your Budget still empty.")
             } else {
                 binding.recBudgeting?.visibility = View.VISIBLE
             }
@@ -85,13 +84,7 @@ class BudgetingFragment : Fragment() {
                 binding.progressLoad?.visibility = View.VISIBLE
             }
         })
-        viewModel.budgetLoadErrorLD.observe(viewLifecycleOwner, Observer {
-            if(it == false) {
-                binding.txtError?.visibility = View.GONE
-            } else {
-                binding.txtError?.visibility = View.VISIBLE
-            }
-        })
+
 
     }
 

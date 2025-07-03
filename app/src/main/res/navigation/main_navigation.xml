@@ -82,7 +82,11 @@
         android:id="@+id/ItemProfile"
         android:name="com.mardev.expensetrackerhelios.view.UserProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/actionSignOut"
+            app:destination="@id/SignInFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editBudgetFragment"
         android:name="com.mardev.expensetrackerhelios.view.EditBudgetFragment"

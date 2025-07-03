@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <!-- Jika ingin binding variabel nanti bisa ditambahkan di sini -->
+        <!-- Untuk data binding User object -->
+        <variable
+            name="user"
+            type="com.mardev.expensetrackerhelios.model.User"/>
     </data>
 
     <FrameLayout
@@ -25,11 +28,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <!-- Contoh binding user.username ke TextView -->
+            <TextView
+                android:id="@+id/txtUsernameProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{user != null ? user.username : ""}'
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/txtProfile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtInputOldPw"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/txtProfile"
+                app:layout_constraintTop_toBottomOf="@id/txtUsernameProfile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="20dp">
@@ -38,7 +53,8 @@
                     android:id="@+id/edtOldPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Old Password" />
+                    android:hint="Old Password"
+                    android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -54,7 +70,8 @@
                     android:id="@+id/edtNewPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="New Password" />
+                    android:hint="New Password"
+                    android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -70,7 +87,8 @@
                     android:id="@+id/edtRepeatPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Repeat Password" />
+                    android:hint="Repeat Password"
+                    android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
