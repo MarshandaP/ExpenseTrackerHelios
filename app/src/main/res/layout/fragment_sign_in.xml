@@ -12,14 +12,13 @@
 
         <ImageView
             android:id="@+id/imgFoto"
-            android:layout_width="175dp"
-            android:layout_height="149dp"
-            android:layout_marginTop="124dp"
+            android:layout_width="250dp"
+            android:layout_height="223dp"
+            android:layout_marginTop="52dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_e" />
+            app:srcCompat="@drawable/heliosexpensetracker" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
